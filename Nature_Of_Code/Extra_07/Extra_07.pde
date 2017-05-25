@@ -1,4 +1,4 @@
-// ベクトル運動：マウスに追従するための加速度計算
+// ベクトル運動：マウスに追従するための加速度計算 + 加速度にパーリンノイズ加算
 Mover[] movers = new Mover[50];
 
 void setup() {
@@ -23,7 +23,7 @@ void draw() {
     movers[i].checkEdges();
     movers[i].display();
   }
-  saveFrame("frames/######.tif");
+  //saveFrame("frames/######.tif");
 }
 
 // 移動オブジェクトクラス
