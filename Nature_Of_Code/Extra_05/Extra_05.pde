@@ -8,9 +8,11 @@ float theta = 0.0;
 */
 void setup() {
   size(480, 480, OPENGL);
-  cube = new Cube(20, width, height);
-
-  frameRate(30);
+  float r = random(255);
+  float g = random(255);
+  float b = random(255);
+  cube = new Cube(20, width, height, r, g, b);
+  //frameRate(30);
 }
 
 /*
@@ -27,7 +29,7 @@ void draw() {
   popMatrix();
   theta += 0.0025;
   
-  saveFrame("frames/######.tif");
+  //saveFrame("frames/######.tif");
 }
 
 /*
@@ -43,17 +45,23 @@ class Cube {
   float _xoff = 0.0;
   float _zoff = 0.0;
   float [][] _z;
+  float [][] _cubeArray;
+  float _r , _g, _b;
 
   /*
   * Constructor
   */
-  Cube(int cubeSize, int w, int h) {
+  Cube(int cubeSize, int w, int h, float r, float g, float b) {
     _cubeSize = cubeSize;
     _w = w;
     _h = h;
     _cols = _w / _cubeSize / 2;
     _rows = _h / _cubeSize / 2;
     _z = new float[_cols][_rows];
+    _cubeArray = new float[_cols][_rows];
+    _r = r;
+    _g = g;
+    _b = b;
   }
   
   /*
@@ -65,6 +73,7 @@ class Cube {
       float yoff = 0.0;
       for (int y = 0; y < _rows; y++) {
         _z[x][y] = map(noise(xoff, yoff, _zoff), 0, 1, -120, 120);
+        _cubeArray[x][y] = map(noise(xoff, yoff, _zoff), 0, 1, 0, 50);
         yoff += 0.1;
       }
       xoff += 0.1;
@@ -84,16 +93,34 @@ class Cube {
         // Chage Color
         float currentElevation = _z[x][y];
         float currentShade = map(currentElevation, -120, 120, 0, 255);
-        fill (currentShade, currentShade, 0, 255);
+        float currentShade_r = currentShade + _r > 255 ? 255 : currentShade;
+        if (currentShade_r > 255) {
+          currentShade_r = 255;
+        } else if(currentShade_r < 0) {
+          currentShade_r = 0;
+        }
+        float currentShade_g = currentShade + _g;
+        if (currentShade_g > 255) {
+          currentShade_g = 255;
+        } else if(currentShade_g < 0) {
+          currentShade_g = 0;
+        }
+        float currentShade_b = currentShade + _b;
+        if (currentShade_b > 255) {
+          currentShade_b = 255;
+        } else if(currentShade_b < 0) {
+          currentShade_b = 0;
+        }
+        fill (currentShade_r, currentShade_g, currentShade_b, 255);
 
         // Rendering
         pushMatrix();
         float xPos = ((x + xspace) * _cubeSize) - (_w / 2);
         float yPos = ((y + yspace) * _cubeSize) - (_h / 2);
         translate(xPos, yPos, _z[x][y]);
-        rotateX((PI/180)*_rot);
-        rotateY((PI/180)*_rot);
-        box(_cubeSize);
+        //rotateX((PI/180)*_rot);
+        //rotateY((PI/180)*_rot);
+        ellipse(0, 0, _cubeArray[x][y], _cubeArray[x][y]);
         popMatrix();
         
         // Count Up of y
