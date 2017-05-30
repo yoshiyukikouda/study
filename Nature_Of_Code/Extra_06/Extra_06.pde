@@ -26,7 +26,7 @@ void draw() {
     movers[i].display();
   }
   popMatrix();
-  saveFrame("frames/######.tif");
+  //saveFrame("frames/######.tif");
 }
 
 // 移動オブジェクトクラス

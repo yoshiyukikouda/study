@@ -93,7 +93,7 @@ class Cube {
         // Chage Color
         float currentElevation = _z[x][y];
         float currentShade = map(currentElevation, -120, 120, 0, 255);
-        float currentShade_r = currentShade + _r > 255 ? 255 : currentShade;
+        float currentShade_r = currentShade + _r > 200 ? 255 : currentShade;
         if (currentShade_r > 255) {
           currentShade_r = 255;
         } else if(currentShade_r < 0) {
